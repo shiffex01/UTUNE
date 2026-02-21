@@ -4,7 +4,7 @@ import TotalUsersChart from "../components/TotalUsersChart";
 import NewRegistrationsChart from "../components/NewRegistrationsChart";
 import ActiveInactiveChart from "../components/ActiveInactiveChart";
 import DailyActiveChart from "../components/DailyActiveChart";
-import { analyticsStats, monthlyStats } from "../data/AnalyticsMock";
+import { analyticsStats, monthlyStats } from "../data/AnalyticsMock.js";
 import { LuUsers } from "react-icons/lu";
 import { FiUserCheck, FiActivity } from "react-icons/fi";
 import { IoMdTrendingUp } from "react-icons/io";
