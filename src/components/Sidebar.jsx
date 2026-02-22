@@ -41,6 +41,30 @@ const Sidebar = () => {
 
           <li>
             <NavLink
+              to="/analytics"
+              className={({ isActive }) =>
+                `${linkStyle} ${isActive ? "bg-white/30" : ""}`
+              }
+            >
+              <FaCog />
+              Analytics
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/requests"
+              className={({ isActive }) =>
+                `${linkStyle} ${isActive ? "bg-white/30" : ""}`
+              }
+            >
+              <FaCog />
+              Requests
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
               to="/settings"
               className={({ isActive }) =>
                 `${linkStyle} ${isActive ? "bg-white/30" : ""}`
@@ -51,19 +75,9 @@ const Sidebar = () => {
             </NavLink>
           </li>
 
-          <li>
-            <NavLink
-              to="/analytics"
-              className={({ isActive }) =>
-                `${linkStyle} ${isActive ? "bg-white/30" : ""}`
-              }
-            >
-              <FaCog />
-              Analytics
-            </NavLink>
-          </li>
         </ul>
       </div>
+      
 
       {/* BOTTOM SECTION */}
       <div className="border-t border-white/30 pt-6">

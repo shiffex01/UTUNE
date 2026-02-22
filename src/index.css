@@ -3,3 +3,7 @@
 .main{
     @apply flex pl-56 bg-gray-100 min-h-screen;
 }
+
+.chart_bg{
+    @apply bg-white p-6 rounded-xl shadow
+}

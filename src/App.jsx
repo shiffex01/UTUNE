@@ -6,6 +6,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import LoginPage from "./pages/LoginPage";
 import VerifyPage from "./pages/VerifyPage";
 import Analytics from "./pages/Analytics";
+import ProtectedRoute from "./components/ProtectedRoute";
+import TuneActivationRequests from "./pages/TuneActivationRequests";
 
 function App() {
   return (
@@ -13,12 +15,21 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/verify" element={<VerifyPage />} />
-          <Route path="/" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/analytics" element={<Analytics />} />
-          </Route>
+
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<Users />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="requests" element={<TuneActivationRequests />} />
+        </Route>
       </Routes>
     </Router>
   );

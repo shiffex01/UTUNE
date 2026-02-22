@@ -16,8 +16,10 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // (Backend coming later)
     if (form.email && form.password) {
+      // Save temporary login step
+      localStorage.setItem("adminStep", "login-success");
+
       navigate("/verify");
     }
   };

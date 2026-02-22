@@ -30,7 +30,7 @@ const AdminDashboard = () => {
         bgColor: "bg-orange-600"
     },
     {
-        title: "CTR",
+        title: "Analytics",
         value: dashboardStats.ctr,
         change: "+1.8%",
         icon: <IoMdTrendingUp />,
