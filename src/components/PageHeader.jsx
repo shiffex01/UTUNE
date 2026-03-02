@@ -15,7 +15,7 @@ const PageHeader = ({ title, onMenuClick, children }) => {
           <HiMenu />
         </button>
 
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
+        <h1 className="text-xl md:text-3xl font-bold">
           {title}
         </h1>
       </div>

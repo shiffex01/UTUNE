@@ -5,6 +5,7 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 import { analyticsData } from "../data/analyticsData";
 
@@ -23,18 +24,21 @@ const ActiveInactiveChart = () => {
   ];
 
   return (
-    <div className="chart_bg">
-      <h3 className="font-semibold mb-4">Active & Inactive Users</h3>
+    <div className="chart_bg w-full overflow-hidden">
+      <h3 className="font-semibold mb-4 text-center md:text-left">
+        Active & Inactive Users
+      </h3>
 
-      <div style={{ width: "100%", height: 300 }}>
-        <ResponsiveContainer>
+      {/* Responsive height wrapper */}
+      <div className="w-full h-[250px] sm:h-[280px] md:h-[320px]">
+        <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={pieData}
               dataKey="value"
               nameKey="name"
-              outerRadius={100}
-              label
+              outerRadius="80%"
+              labelLine={false}
             >
               {pieData.map((entry, index) => (
                 <Cell key={index} fill={COLORS[index]} />
@@ -42,6 +46,7 @@ const ActiveInactiveChart = () => {
             </Pie>
 
             <Tooltip />
+            <Legend verticalAlign="bottom" height={36} />
           </PieChart>
         </ResponsiveContainer>
       </div>
