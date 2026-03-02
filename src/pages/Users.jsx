@@ -28,11 +28,7 @@ const Users = () => {
 
   return (
     <div className="main">
-      <div className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-6">Users</h1>
-        <p className="text-sm text-gray-500 mb-6">
-          Manage user accounts by status section
-        </p>
+      <div className="flex-1">
 
         <div className="bg-white p-4 rounded-xl shadow-sm mb-6">
           <div className="flex gap-4 mb-4">
@@ -40,7 +36,7 @@ const Users = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 cursor-pointer py-2 rounded-md text-sm capitalize ${
+                className={`px-4 cursor-pointer py-2 rounded-md md:text-xl text-md capitalize ${
                   activeTab === tab
                     ? tab === "active"
                       ? "bg-green-500 text-white"
@@ -60,7 +56,7 @@ const Users = () => {
             <input
               type="text"
               placeholder="Search by phone number..."
-              className="text-sm bg-transparent outline-none w-full"
+              className="text-md bg-transparent outline-none w-full"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />

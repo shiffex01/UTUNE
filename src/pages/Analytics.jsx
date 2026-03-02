@@ -8,8 +8,46 @@ import { LuUsers } from "react-icons/lu";
 import { FiUserCheck, FiActivity } from "react-icons/fi";
 import { IoMdTrendingUp } from "react-icons/io";
 import { analyticsData } from "../data/analyticsData";
+import * as XLSX from "xlsx";
+
+
 
 const Analytics = () => {
+      const downloadExcel = () => {
+      // Summary section
+      const summary = [
+        { Metric: "Total Users", Value: analyticsData.summary.totalUsers },
+        { Metric: "Active Users", Value: analyticsData.summary.activeUsers },
+        { Metric: "New Registration", Value: analyticsData.summary.newUsers },
+        { Metric: "Daily Active Avg", Value: analyticsData.summary.dailyActiveUsers },
+      ];
+
+      // Table section
+      const tableRows = filteredMonthlyData.map((row) => ({
+        Period: timePeriod === "30days" ? row.day : row.month,
+        TotalUsers: row.total,
+        NewRegistrations: row.new,
+        Active: row.active,
+        Inactive: row.inactive,
+        Banned: row.banned,
+        DailyActiveUsers: row.dau,
+      }));
+
+      // Create workbook
+      const workbook = XLSX.utils.book_new();
+
+      // Summary sheet
+      const summarySheet = XLSX.utils.json_to_sheet(summary);
+      XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
+
+      // Table Sheet
+      const tableSheet = XLSX.utils.json_to_sheet(tableRows);
+      XLSX.utils.book_append_sheet(workbook, tableSheet, "Detailed Stats");
+
+      // Export file
+      XLSX.writeFile(workbook, "analytics_report.xlsx");
+    };
+
   const statCards = [
     {
       title: "Total Users",
@@ -55,10 +93,11 @@ const Analytics = () => {
 
   return (
     <div className="main">
-      <div className="flex-1 p-8">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Analytics</h1>
-          <button className="px-4 py-2 bg-gradient-to-r font-bold from-blue-600 to-pink-500 text-white rounded-md shadow">
+      <div className="flex-1">
+        <div className="flex md:justify-between justify-end items-center mb-6">
+          <button 
+          onClick={downloadExcel}
+          className="px-4 py-2 bg-gradient-to-r font-bold from-blue-600 to-pink-500 text-white rounded-md shadow">
             Download Report
           </button>
         </div>

@@ -40,28 +40,30 @@ const AdminDashboard = () => {
     
   return (
     <div className="main">
-      <div className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-
+      <div className="flex-1">
         {/* Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {mockData.map((card, index) => (
-                <StatCard
-                key={index}
-                title={card.title}
-                value={card.value}
-                change={card.change}
-                icon={card.icon}
-                bgColor={card.bgColor}
-                />
-            ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {mockData.map((card, index) => (
+            <StatCard
+              key={index}
+              title={card.title}
+              value={card.value}
+              change={card.change}
+              icon={card.icon}
+              bgColor={card.bgColor}
+            />
+          ))}
         </div>
 
         {/* Charts */}
-        <ChartsSection analytics={analyticsData} />
+        <div className="mt-8">
+          <ChartsSection analytics={analyticsData} />
+        </div>
 
         {/* Recent Activity */}
-        <RecentActivity activities={recentActivities} />
+        <div className="mt-8">
+          <RecentActivity activities={recentActivities} />
+        </div>
       </div>
     </div>
   );

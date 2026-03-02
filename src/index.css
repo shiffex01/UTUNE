@@ -1,9 +1,30 @@
 @import "tailwindcss";
 
 .main{
-    @apply flex pl-56 bg-gray-100 min-h-screen;
+    @apply flex bg-gray-100 min-h-screen;
 }
 
 .chart_bg{
     @apply bg-white p-6 rounded-xl shadow
 }
+
+.anasearch{
+    @apply ml-auto w-full bg-gray-200 rounded-md outline-none
+}
+
+.anasearch::placeholder{
+    @apply text-gray-900
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn { animation: fadeIn 1s ease-in-out; }
+.animate-slideUp { animation: slideUp 0.5s ease-out; }

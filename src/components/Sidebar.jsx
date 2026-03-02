@@ -1,105 +1,68 @@
 import { NavLink } from "react-router-dom";
 import { FaTachometerAlt, FaUsers, FaCog, FaSignOutAlt } from "react-icons/fa";
-import { FiUser } from "react-icons/fi";
+import { FiUser, FiBarChart2, FiFileText } from "react-icons/fi";
+import adaptive_icon from "../assets/adaptive_icon.png"
 
-const Sidebar = () => {
-  const linkStyle =
-    "flex items-center gap-3 p-2 rounded-lg hover:bg-white/20 transition";
+const Sidebar = ({ className = "", closeSidebar }) => {
+  const linkStyle = "flex items-center gap-3 p-2 rounded-lg hover:bg-white/20 transition";
+
+  const links = [
+    { to: "/", label: "Dashboard", icon: <FaTachometerAlt /> },
+    { to: "/users", label: "Users", icon: <FaUsers /> },
+    { to: "/analytics", label: "Analytics", icon: <FiFileText /> },
+    { to: "/requests", label: "Requests", icon: <FiBarChart2 /> },
+    { to: "/settings", label: "Settings", icon: <FaCog /> },
+  ];
 
   return (
-    <div className="h-screen w-64 bg-gradient-to-b from-purple-600 fixed to-pink-500 text-white p-6 flex flex-col justify-between">
-      
-      {/* TOP SECTION */}
+    <div className={`w-64 bg-gradient-to-b from-purple-600 to-pink-500 text-white p-6 flex flex-col justify-between ${className}`}>
       <div>
-        <h1 className="text-2xl font-bold mb-10">UTUNE</h1>
+        {/* Logo */}
+        <div className="flex gap-3 items-center mb-10">
+          <div className="bg-white h-fit p-2 rounded-full w-fit">
+          <img src={adaptive_icon} alt="utune logo" className="w-4 h-5" />
+          </div>
+          <h1 className="text-2xl font-bold">UTUNE</h1>
+        </div>  
 
+        {/* Navigation */}
         <ul className="space-y-4">
-          <li>
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                `${linkStyle} ${isActive ? "bg-white/30" : ""}`
-              }
-            >
-              <FaTachometerAlt />
-              Dashboard
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/users"
-              className={({ isActive }) =>
-                `${linkStyle} ${isActive ? "bg-white/30" : ""}`
-              }
-            >
-              <FaUsers />
-              Users
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/analytics"
-              className={({ isActive }) =>
-                `${linkStyle} ${isActive ? "bg-white/30" : ""}`
-              }
-            >
-              <FaCog />
-              Analytics
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/requests"
-              className={({ isActive }) =>
-                `${linkStyle} ${isActive ? "bg-white/30" : ""}`
-              }
-            >
-              <FaCog />
-              Requests
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                `${linkStyle} ${isActive ? "bg-white/30" : ""}`
-              }
-            >
-              <FaCog />
-              Settings
-            </NavLink>
-          </li>
-
+          {links.map((link) => (
+            <li key={link.to}>
+              <NavLink
+                to={link.to}
+                className={({ isActive }) => `${linkStyle} ${isActive ? "bg-white/30" : ""}`}
+                onClick={() => closeSidebar?.()} // closes on mobile
+              >
+                {link.icon}
+                {link.label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </div>
-      
 
       {/* BOTTOM SECTION */}
-      <div className="border-t border-white/30 pt-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="bg-white/20 p-2 rounded-full">
-            <FiUser />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Admin Name</p>
-            <p className="text-xs opacity-80">admin@utune.com</p>
-          </div>
-        </div>
-
-        <NavLink
-          to="/login"
-        >
-          <button className="cursor-pointer flex items-center gap-2 text-sm bg-white/15 w-full rounded-xl flex items-center justify-center text-center p-2 hover:text-red-200 transition">
-          <FaSignOutAlt />
-          Logout
-          </button>
-        </NavLink>
-      </div>
+            <div className="border-t border-white/30 pt-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-white/20 p-2 rounded-full">
+                  <FiUser />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">Shiffy</p>
+                  <p className="text-xs opacity-80">admin@utune.com</p>
+                </div>
+              </div>
+      
+              <NavLink
+                to="/login"
+              >
+                <button className="cursor-pointer flex items-center gap-2 text-sm bg-white/15 w-full rounded-xl flex items-center justify-center text-center p-2 hover:text-red-200 transition">
+                <FaSignOutAlt />
+                Logout
+                </button>
+              </NavLink>
+            </div>
     </div>
   );
 };

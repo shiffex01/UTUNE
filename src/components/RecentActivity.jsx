@@ -1,4 +1,5 @@
 import React from "react";
+import { analyticsData } from "../data/analyticsData";
 
 const RecentActivity = ({ activities }) => {
   return (

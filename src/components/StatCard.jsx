@@ -2,7 +2,7 @@ import React from "react";
 
 const StatCard = ({ title, value, change, icon, bgColor }) => {
   return (
-    <div className="bg-white shadow-md rounded-xl p-5 w-full">
+    <div className="bg-white shadow-md rounded-xl items-start md:items-center p-5 w-full">
 
       <div
         className={`${bgColor} p-3 rounded-2xl w-16 flex items-center justify-center text-white text-2xl`}

@@ -1,6 +1,25 @@
 import React, { useState } from "react";
 
 const Settings = () => {
+  const handleAutoApproveToggle = async () => {
+    const newValue = !autoApprove;
+    setAutoApprove(newValue);
+
+    if (newValue) {
+      try {
+        const res = await fetch("/api/approve-all-pending", {
+          method: "POST",
+        });
+
+        if (!res.ok) throw new Error("Request failed");
+
+        alert("All pending users have been automatically approved!");
+      } catch (error) {
+        console.error(error);
+        alert("Failed to auto-approve users.");
+      }
+    }
+  };
   const [pushNotifications, setPushNotifications] = useState(true);
   const [weeklyReports, setWeeklyReports] = useState(false);
   const [emailAlerts, setEmailAlerts] = useState(true);
@@ -8,9 +27,7 @@ const Settings = () => {
   const [maxContacts, setMaxContacts] = useState(100);
 
   return (
-    <div className="pl-60 min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold mb-2">Settings</h1>
-      <p className="text-gray-500 mb-6">Configure platform settings</p>
+    <div className="min-h-screen bg-gray-50">
 
       {/* Notifications Card */}
       <div className="bg-white rounded-xl shadow p-6 mb-6">
@@ -88,7 +105,7 @@ const Settings = () => {
               <p className="text-gray-400 text-sm">Auto approve registrations</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" checked={autoApprove} onChange={() => setAutoApprove(!autoApprove)} className="sr-only peer" />
+              <input type="checkbox" checked={autoApprove} onChange={handleAutoApproveToggle} className="sr-only peer" />
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition-transform"></span>
             </label>

@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FaPlay, FaPause, FaSearch } from "react-icons/fa";
+import ABUAnthem from '../audio/ABUAnthem.mp3';
+import PageHeader from "../components/PageHeader";
+import { useOutletContext } from "react-router-dom";
 
 const mockRequests = [
-  { id: 1, title: "Golden Days", user: "0802395275", contact: "08123651735", amount: "N20", status: "pending", audio: "/audio/golden-days.mp3" },
-  { id: 2, title: "Thunder", user: "0802395275", contact: "08123651735", amount: "N20", status: "pending", audio: "/audio/thunder.mp3" },
-  { id: 3, title: "Who Am I", user: "0802395275", contact: "08123651735", amount: "N20", status: "approved", audio: "/audio/who-am-i.mp3" },
-  { id: 4, title: "Happiest Day", user: "0802395275", contact: "08123651735", amount: "N20", status: "declined", audio: "/audio/happiest-day.mp3" },
+  { id: 1, title: "Golden Days", user: "0802395275", contact: "08123651735", amount: "₦100", status: "pending", audio: ABUAnthem},
+  { id: 2, title: "Thunder", user: "0802395275", contact: "08123651735", amount: "₦100", status: "pending", audio: ABUAnthem },
+  { id: 3, title: "Who Am I", user: "0802395275", contact: "08123651735", amount: "₦100", status: "approved", audio: ABUAnthem },
+  { id: 4, title: "Happiest Day", user: "0802395275", contact: "08123651735", amount: "₦100", status: "declined", audio: ABUAnthem },
 ];
 
 const statusColors = {
@@ -15,19 +18,21 @@ const statusColors = {
 };
 
 // Small audio signal animation
-const PlayingSignal = () => (
-  <div className="flex space-x-1 items-end h-6 mt-2">
-    {[...Array(5)].map((_, i) => (
-      <div
-        key={i}
-        className="w-1 bg-blue-500 animate-pulse"
-        style={{ animationDelay: `${i * 0.1}s`, height: `${Math.random() * 60 + 20}%` }}
-      />
-    ))}
-  </div>
-);
+// const PlayingSignal = () => (
+//   <div className="flex space-x-1 items-end h-6 mt-2">
+//     {[...Array(5)].map((_, i) => (
+//       <div
+//         key={i}
+//         className="w-1 bg-blue-500 animate-pulse"
+//         style={{ animationDelay: `${i * 0.1}s`, height: `${Math.random() * 60 + 20}%` }}
+//       />
+//     ))}
+//   </div>
+// );
 
 const TuneActivationRequests = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
   const [confirmModal, setConfirmModal] = useState({ visible: false, action: null, id: null });
   const [requests, setRequests] = useState(mockRequests);
   const [filter, setFilter] = useState("all");
@@ -40,25 +45,21 @@ const TuneActivationRequests = () => {
 
   // Handle play/pause
   const handlePlay = (id) => {
-    if (playingId === id) {
-      audioRef.current.pause();
-      setPlayingId(null);
-    } else {
-      setPlayingId(id);
-    }
-  };
+  if (playingId === id) {
+    setPlayingId(null);
+  } else {
+    setPlayingId(id);
+  }
+};
 
-  // Auto-play audio when playingId changes
-  useEffect(() => {
-    const audioEl = audioRef.current;
-    if (playingId && audioEl) {
-      const currentTune = requests.find(r => r.id === playingId);
-      if (currentTune) {
-        audioEl.src = currentTune.audio;
-        audioEl.play().catch(err => console.log("Playback failed:", err));
-      }
-    }
-  }, [playingId, requests]);
+    //Autoplay when popup opens
+    useEffect(() => {
+        if (playingId !== null && audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play();
+          setIsPlaying(true);
+        }
+      }, [playingId]);
 
   // Filtered requests
   const filteredRequests = filter === "all" ? requests : requests.filter(r => r.status === filter);
@@ -71,19 +72,20 @@ const TuneActivationRequests = () => {
     declined: requests.filter(r => r.status === "declined").length,
   };
 
+  
+
   return (
-    <div className="main">
-      <div className="flex-1 p-8">
+    <div className="main full">
+      <div className="flex-1 w-full">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Tune Activation Requests</h1>
           <span className="px-4 py-2 bg-gradient-to-r from-blue-600 to-pink-500 text-white rounded-full font-bold">
             {counts.pending} Pending
           </span>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {["all", "pending", "approved", "declined"].map((type) => (
             <div key={type} className="flex items-center justify-between p-4 bg-white rounded-xl shadow">
               <div>
@@ -95,21 +97,26 @@ const TuneActivationRequests = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex items-center space-x-2 mb-4">
+        <div className="bg-white p-4 rounded-xl mb-4">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-3">
           {["all", "pending", "approved", "declined"].map(f => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-4 py-1 rounded-full font-medium ${filter === f ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"}`}
+              className={`px-4 py-1 rounded-full cursor-pointer font-medium ${filter === f ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"}`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
-          <input
-            type="text"
-            placeholder="Search by phone number..."
-            className="ml-auto border px-3 py-1 rounded-md outline-none"
-          />
+            <div className=" flex items-center gap-3 bg-gray-200 p-4 rounded-xl w-full">
+              <FaSearch className="text-gray-800"/>
+              <input
+              type="text"
+              placeholder="Search by phone number..."
+              className="anasearch"
+            />
+           </div> 
+        </div>
         </div>
 
         {/* Request Cards */}
@@ -124,15 +131,20 @@ const TuneActivationRequests = () => {
               </span>
 
               {/* Tune title */}
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handlePlay(req.id)}>
-                {playingId === req.id ? <FaPause className="text-red-500" /> : <FaPlay className="text-blue-500" />}
-                <h3 className="font-bold text-lg">{req.title}</h3>
+              <div className="flex flex-col space-x-2 cursor-pointer" >
+                <div className="flex gap-4 items-center mb-2" onClick={() => handlePlay(req.id)}> 
+                  {playingId === req.id ? <FaPause className="text-red-500" /> : <FaPlay className="text-blue-500" />}
+                  <h3 className="font-bold text-lg">{req.title}</h3>
+                </div>
+                <p className="text-md text-gray-800">User: <span className="font-bold">{req.user}</span></p>
+                <p className="text-md text-gray-800 mb-2">Contact: <span className="font-bold">{req.contact}</span></p>
+                <p className="text-md text-gray-800">Amount: <span className="font-bold text-blue-900">{req.amount}</span></p>
               </div>
 
-              {playingId === req.id && <PlayingSignal />}
+              {/* {playingId === req.id && <PlayingSignal />}
               <p className="text-sm text-gray-600">User: {req.user}</p>
               <p className="text-sm text-gray-600">Contact: {req.contact}</p>
-              <p className="text-sm text-gray-600">Amount: {req.amount}</p>
+              <p className="text-sm text-gray-600">Amount: {req.amount}</p> */}
 
               {/* Approve/Decline */}
               {req.status === "pending" && (
@@ -152,9 +164,9 @@ const TuneActivationRequests = () => {
                 </div>
               )}
 
-              {playingId === req.id && (
+              {/* {playingId === req.id && (
                 <audio ref={audioRef} autoPlay src={req.audio} onEnded={() => setPlayingId(null)} />
-              )}
+              )} */}
             </div>
           ))}
         </div>
@@ -162,7 +174,7 @@ const TuneActivationRequests = () => {
 
       {/* ✅ Combined overlay for blur */}
       {(playingId || confirmModal.visible) && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/20 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
 
           {/* Audio Popup */}
           {(playingId !== null || confirmModal.visible) && (
@@ -170,43 +182,78 @@ const TuneActivationRequests = () => {
 
     {/* AUDIO POPUP */}
         {playingId !== null && (
-        <div className="bg-green-600 text-white rounded-2xl w-96 p-6 flex flex-col items-center space-y-4 relative shadow-xl animate-fadeIn">
-            <button
-            className="absolute top-2 right-3 text-white text-2xl hover:text-gray-200"
-            onClick={() => setPlayingId(null)}
-            >
-            ×
-            </button>
+  <div className="bg-green-600 text-white rounded-2xl w-96 p-6 flex flex-col items-center space-y-4 relative shadow-xl">
 
-            <FaPause className="text-3xl mb-2" />
+    {/* Close */}
+    <button
+      className="absolute top-2 right-3 text-white text-2xl"
+      onClick={() => {
+        audioRef.current.pause();
+        setPlayingId(null);
+        setIsPlaying(false);
+      }}
+    >
+      ×
+    </button>
 
-            {/* waveform */}
-            <div className="flex space-x-1 items-end h-14 w-full">
-            {[...Array(25)].map((_, i) => (
-                <div
-                key={i}
-                className="bg-white w-1 rounded animate-pulse"
-                style={{
-                    animationDelay: `${i * 0.04}s`,
-                    height: `${Math.random() * 80 + 10}%`,
-                }}
-                />
-            ))}
-            </div>
+    {/* Play / Pause Button */}
+    <button
+      onClick={() => {
+        if (isPlaying) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        } else {
+          if (audioRef.current.currentTime >= 20) {
+            audioRef.current.currentTime = 0;
+          }
+          audioRef.current.play();
+          setIsPlaying(true);
+        }
+      }}
+      className="text-3xl"
+    >
+      {isPlaying ? <FaPause /> : <FaPlay />}
+    </button>
 
-            <p className="font-bold text-lg">
-            {requests.find(r => r.id === playingId)?.title}
-            </p>
+    {/* 🔥 Waveform */}
+    <div className="flex items-center"> 
+      <div className="flex space-x-1 items-end h-14 w-full">
+        {[...Array(25)].map((_, i) => (
+          <div
+            key={i}
+            className={`w-1 rounded transition-all duration-150 ${
+              isPlaying ? "bg-white animate-pulse" : "bg-white/40"
+            }`}
+            style={{
+              animationDelay: `${i * 0.04}s`,
+              height: `${Math.random() * 70 + 20}%`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
 
-            {/* Single audio source only inside popup */}
-            <audio
-            ref={audioRef}
-            src={requests.find(r => r.id === playingId)?.audio}
-            autoPlay
-            onEnded={() => setPlayingId(null)}
-            />
-        </div>
-        )}
+    <p className="font-bold text-lg">
+      {requests.find(r => r.id === playingId)?.title}
+    </p>
+
+    {/* Audio */}
+    <audio
+      ref={audioRef}
+      src={requests.find(r => r.id === playingId)?.audio}
+      onTimeUpdate={(e) => {
+        const time = e.target.currentTime;
+
+        // 🔥 STOP AT 20 SECONDS
+        if (time >= 20) {
+          e.target.pause();
+          setIsPlaying(false);
+        }
+      }}
+      onEnded={() => setIsPlaying(false)}
+    />
+  </div>
+)}
 
         {/* CONFIRMATION MODAL */}
         {confirmModal.visible && (

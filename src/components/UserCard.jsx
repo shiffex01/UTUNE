@@ -50,14 +50,14 @@ const UserCard = ({ user, setActiveMenuId, activeMenuId, onStatusChange }) => {
                 <FaPhone className="text-white"/>
             </div>
                 <div>
-                    <div onClick={toggleMenu} className="cursor-pointer">
+                    <div onClick={toggleMenu} className="cursor-pointer text-xl">
                     <MdMoreVert/>
                     {/* Dropdown */}
                     {isMenuOpen && (
                         <div className="absolute mt-2 bg-white shadow-lg rounded-md p-2 z-10">
                         <button
                             onClick={() => setShowConfirm(true)}
-                            className={`text-sm px-3 py-2 rounded w-full text-left cursor-pointer ${
+                            className={`text-sm md:text-md px-3 py-2 rounded w-full text-left cursor-pointer ${
                             isBanned ? "text-green-600" : "text-red-500"
                             }`}
                         >
@@ -70,11 +70,11 @@ const UserCard = ({ user, setActiveMenuId, activeMenuId, onStatusChange }) => {
             </div>
             </div>
             <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold">{user.phone}</h3>
+                <h3 className="text-md md:text-xl font-semibold">{user.phone}</h3>
                 <div className="relative">
                 <MdContentCopy
                     onClick={handleCopy}
-                    className="cursor-pointer hover:text-green-600 transition"
+                    className="cursor-pointer text-mdhover:text-green-600 transition"
                 />
 
                 {copied && (
@@ -85,8 +85,8 @@ const UserCard = ({ user, setActiveMenuId, activeMenuId, onStatusChange }) => {
                 </div>
             </div>  
             <hr className="my-2 text-black/30"/>
-            <p className="text-sm text-gray-600">Joined: {user.date} </p>
-            <p className="text-sm text-gray-600">Joined: {user.active} </p>    
+            <p className="text-sm md:text-md text-gray-600">Joined: {user.date} </p>
+            <p className="text-sm md:text-md text-gray-600">Joined: {user.active} </p>    
         </div>
         
           {/* Confirm Modal */}
