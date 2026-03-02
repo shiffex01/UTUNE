@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UserCard from "../components/UserCard";
-import { usersMock } from "../data/UsersMock.js";
+import { usersMock } from "../data/usersMock.js";
 import { IoSearch } from "react-icons/io5";
 
 const Users = () => {
