@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // change later
+  // Use a relative path so Vite dev server proxy (configured in vite.config.js)
+  // will forward requests to the backend during development and avoid CORS.
+  baseURL: "/api",
 });
 
 // Example endpoints
