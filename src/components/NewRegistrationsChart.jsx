@@ -8,9 +8,6 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import { analyticsData } from "../data/analyticsData";
-
-
 const NewRegistrationChart = ({ data }) => {
   return (
     <div className="chart_bg">
