@@ -7,11 +7,11 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      // Proxy /api requests to the backend during development to avoid CORS issues
+      // Proxy /api requests to the real backend to avoid CORS in development
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://api.utune.com.ng',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },
