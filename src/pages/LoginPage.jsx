@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import AuthLayout from "../components/AuthLayout";
 import { useNavigate } from "react-router-dom";
-import adaptive_icon from "../assets/adaptive_icon.png"
+import adaptive_icon from "../assets/adaptive_icon.png";
+import { sendAdminOTP } from "../services/api";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ email: "" });
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
 
@@ -30,13 +33,27 @@ const LoginPage = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setApiError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.email && form.password) {
-      localStorage.setItem("adminStep", "login-success");
+    if (!form.email) return;
+    setLoading(true);
+    setApiError("");
+    try {
+      await sendAdminOTP(form.email);
+      // Store email so VerifyPage can use it
+      localStorage.setItem("adminEmail", form.email);
       navigate("/verify");
+    } catch (err) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        "Failed to send OTP. Please try again.";
+      setApiError(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,7 +77,7 @@ const LoginPage = () => {
         Log In
       </h2>
       <p className="text-gray-500 text-sm sm:text-base text-center mb-6">
-        You will get a 4 digit code to verify next
+        You will get a 6 digit code to verify next
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -71,30 +88,24 @@ const LoginPage = () => {
           <input
             type="email"
             name="email"
-            placeholder="shify@example.com"
+            placeholder="admin@example.com"
             className="w-full border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-4 py-2 sm:py-3 rounded-lg text-sm sm:text-base transition"
             onChange={handleChange}
+            value={form.email}
+            required
           />
         </div>
 
-        <div>
-          <label className="block font-semibold mb-2 text-sm sm:text-base">
-            Enter your password
-          </label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            className="w-full border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none px-4 py-2 sm:py-3 rounded-lg text-sm sm:text-base transition"
-            onChange={handleChange}
-          />
-        </div>
+        {apiError && (
+          <p className="text-red-500 text-sm text-center">{apiError}</p>
+        )}
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-blue-600 to-pink-500 hover:opacity-90 transition text-white py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold"
+          disabled={loading}
+          className="w-full bg-gradient-to-r from-blue-600 to-pink-500 hover:opacity-90 transition text-white py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold disabled:opacity-60"
         >
-          Continue
+          {loading ? "Sending OTP…" : "Continue"}
         </button>
       </form>
     </div>

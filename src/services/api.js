@@ -1,14 +1,41 @@
 import axios from "axios";
 
 const API = axios.create({
-  // Use a relative path so Vite dev server proxy (configured in vite.config.js)
-  // will forward requests to the backend during development and avoid CORS.
+  // Relative path → Vite dev proxy forwards to backend, no CORS in dev.
+  // In production, this should be the same origin or set VITE_API_BASE_URL.
   baseURL: "/api",
 });
 
-// Example endpoints
+// Attach admin JWT token to every request automatically
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("adminToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// ── AUTH ────────────────────────────────────────────────────────────────────
+export const sendAdminOTP = (email) =>
+  API.post("/admin/send-otp", { email });
+
+export const verifyAdminOTP = (email, otp) =>
+  API.post("/admin/verify-otp", { email, otp });
+
+// ── ADMIN — USERS ───────────────────────────────────────────────────────────
+export const getAllUsers = () => API.get("/admin/users");
+export const banUser    = (userId) => API.patch(`/admin/users/${userId}/ban`);
+export const unbanUser  = (userId) => API.patch(`/admin/users/${userId}/unban`);
+
+// ── ADMIN — TUNES ───────────────────────────────────────────────────────────
+export const getAllTunes   = () => API.get("/admin/tunes");
+export const approveTune  = (songId) => API.patch(`/admin/tunes/${songId}/approve`);
+export const rejectTune   = (songId, reason = "") =>
+  API.patch(`/admin/tunes/${songId}/reject`, reason ? { reason } : {});
+
+// ── DASHBOARD (kept for future real endpoints) ──────────────────────────────
 export const getDashboardStats = () => API.get("/dashboard/stats");
-export const getAnalyticsData = () => API.get("/dashboard/analytics");
+export const getAnalyticsData  = () => API.get("/dashboard/analytics");
 export const getRecentActivity = () => API.get("/dashboard/activity");
 
 export default API;
