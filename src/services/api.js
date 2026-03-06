@@ -15,6 +15,20 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+// Auto-logout on 401 (expired/invalid token) or 403 (not admin)
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401 || error?.response?.status === 403) {
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminAuth");
+      localStorage.removeItem("adminEmail");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+
 // ── AUTH ────────────────────────────────────────────────────────────────────
 export const sendAdminOTP = (email) =>
   API.post("/admin/send-otp", { email });

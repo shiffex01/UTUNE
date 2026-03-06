@@ -58,7 +58,6 @@ const VerifyPage = () => {
       const token = res.data?.data?.token;
       if (token) {
         localStorage.setItem("adminToken", token);
-        localStorage.setItem("adminAuth", "true");
         localStorage.removeItem("adminEmail");
       }
       navigate("/");
