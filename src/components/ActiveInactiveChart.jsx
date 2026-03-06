@@ -7,20 +7,13 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { analyticsData } from "../data/analyticsData";
 
 const COLORS = ["#22c55e", "#ef4444"];
 
-const ActiveInactiveChart = () => {
+const ActiveInactiveChart = ({ activeUsers = 0, inactiveUsers = 0 }) => {
   const pieData = [
-    {
-      name: "Active Users",
-      value: analyticsData.summary.activeUsers,
-    },
-    {
-      name: "Inactive Users",
-      value: analyticsData.summary.inactiveUsers,
-    },
+    { name: "Active Users",   value: activeUsers   },
+    { name: "Inactive Users", value: inactiveUsers },
   ];
 
   return (

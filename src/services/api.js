@@ -27,6 +27,14 @@ export const getAllUsers = () => API.get("/admin/users");
 export const banUser    = (userId) => API.patch(`/admin/users/${userId}/ban`);
 export const unbanUser  = (userId) => API.patch(`/admin/users/${userId}/unban`);
 
+// ── ADMIN — STATS ───────────────────────────────────────────────────────────
+export const getAdminStats = () => API.get("/admin/stats");
+
+// ── ADMIN — ANALYTICS TIME-SERIES ───────────────────────────────────────────
+// range: "12months" | "30days" | "7days"
+export const getTimeSeries = (range = "12months") =>
+  API.get("/admin/analytics/time-series", { params: { range } });
+
 // ── ADMIN — TUNES ───────────────────────────────────────────────────────────
 export const getAllTunes   = () => API.get("/admin/tunes");
 export const approveTune  = (songId) => API.patch(`/admin/tunes/${songId}/approve`);
