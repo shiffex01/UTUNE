@@ -1,10 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaTachometerAlt, FaUsers, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { FiUser, FiBarChart2, FiFileText } from "react-icons/fi";
 import adaptive_icon from "../assets/adaptive_icon.png"
 
 const Sidebar = ({ className = "", closeSidebar }) => {
+  const navigate = useNavigate();
   const linkStyle = "flex items-center gap-3 p-2 rounded-lg hover:bg-white/20 transition";
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminAuth");
+    localStorage.removeItem("adminEmail");
+    navigate("/login", { replace: true });
+  };
 
   const links = [
     { to: "/", label: "Dashboard", icon: <FaTachometerAlt /> },
@@ -54,14 +62,12 @@ const Sidebar = ({ className = "", closeSidebar }) => {
                 </div>
               </div>
       
-              <NavLink
-                to="/login"
-              >
-                <button className="cursor-pointer flex items-center gap-2 text-sm bg-white/15 w-full rounded-xl flex items-center justify-center text-center p-2 hover:text-red-200 transition">
-                <FaSignOutAlt />
-                Logout
-                </button>
-              </NavLink>
+          <button
+            onClick={handleLogout}
+            className="cursor-pointer flex items-center gap-2 text-sm bg-white/15 w-full rounded-xl flex items-center justify-center text-center p-2 hover:text-red-200 transition">
+            <FaSignOutAlt />
+            Logout
+          </button>
             </div>
     </div>
   );

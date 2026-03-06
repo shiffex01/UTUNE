@@ -23,7 +23,8 @@ API.interceptors.response.use(
       localStorage.removeItem("adminToken");
       localStorage.removeItem("adminAuth");
       localStorage.removeItem("adminEmail");
-      window.location.href = "/login";
+      // Dispatch a custom event so the app can react without a full page reload
+      window.dispatchEvent(new Event("auth:logout"));
     }
     return Promise.reject(error);
   }

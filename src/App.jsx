@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import AdminLayout from "./layout/AdminLayout";
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
@@ -9,9 +10,22 @@ import Analytics from "./pages/Analytics";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TuneActivationRequests from "./pages/TuneActivationRequests";
 
+// Listens for the auth:logout event fired by the axios interceptor
+// and performs a soft React Router redirect — no full page reload
+function AuthLogoutListener() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const handleLogout = () => navigate("/login", { replace: true });
+    window.addEventListener("auth:logout", handleLogout);
+    return () => window.removeEventListener("auth:logout", handleLogout);
+  }, [navigate]);
+  return null;
+}
+
 function App() {
   return (
     <Router>
+      <AuthLogoutListener />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/verify" element={<VerifyPage />} />
