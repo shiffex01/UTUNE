@@ -79,20 +79,27 @@ const VerifyPage = () => {
     <div className="bg-white/95 backdrop-blur-md w-full max-w-md p-6 sm:p-8 rounded-2xl shadow-2xl mx-auto animate-slideUp text-center">
       <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">Enter Code</h2>
       <p className="text-gray-500 text-sm mb-6">
-        A 6-digit OTP was sent to <span className="font-semibold">{localStorage.getItem("adminEmail") || "your email"}</span>
+        A 6-digit OTP was sent to{" "}
+        <span className="font-semibold break-all">
+          {localStorage.getItem("adminEmail") || "your email"}
+        </span>
       </p>
 
-      <div className="flex justify-between gap-2 mb-4">
+      {/* OTP inputs — fixed width per box so they never get squished */}
+      <div className="flex justify-center gap-2 sm:gap-3 mb-6">
         {code.map((digit, index) => (
           <input
             key={index}
             ref={(el) => (inputsRef.current[index] = el)}
             value={digit}
             maxLength="1"
+            inputMode="numeric"
+            autoComplete="one-time-code"
             onChange={(e) => handleChange(e.target.value, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
-            className={`flex-1 h-12 sm:h-14 border rounded-md text-center text-xl sm:text-2xl outline-none 
-              ${error ? "border-red-500" : "border-gray-300"} focus:border-blue-500`}
+            className={`w-10 h-12 sm:w-12 sm:h-14 border-2 rounded-lg text-center text-xl sm:text-2xl font-bold outline-none transition
+              ${error ? "border-red-400 bg-red-50" : "border-gray-300 bg-white"} 
+              focus:border-blue-500 focus:ring-2 focus:ring-blue-200`}
           />
         ))}
       </div>
@@ -111,7 +118,7 @@ const VerifyPage = () => {
 
       <button
         onClick={() => navigate("/login")}
-        className="mt-4 text-sm text-gray-500 hover:text-blue-600 transition"
+        className="mt-4 text-sm text-gray-500 hover:text-blue-600 transition block mx-auto"
       >
         ← Back to Login
       </button>
