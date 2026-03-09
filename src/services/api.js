@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const API = axios.create({
-  // Relative path → Vite dev proxy forwards to backend, no CORS in dev.
-  // In production, this should be the same origin or set VITE_API_BASE_URL.
-  baseURL: "/api",
+  // In dev: Vite proxy forwards /api → https://api.utune.com.ng
+  // In production (Vercel): calls go directly to the backend URL
+  baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
 });
 
 // Attach admin JWT token to every request automatically
